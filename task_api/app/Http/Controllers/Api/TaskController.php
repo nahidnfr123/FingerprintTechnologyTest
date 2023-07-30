@@ -3,19 +3,31 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Traits\ApiResponseTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class TaskController extends Controller
 {
+    use ApiResponseTrait;
+
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        //
+        $user = auth()->user();
+        if (!$user) {
+//            return $this->unauthorized();
+            return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+        $tasks = $user->createdTasks;
+        $tasks->load('assignedTo');
+        return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
     /**
