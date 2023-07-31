@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\CreatedByTrait;
 use App\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory, UuidTrait, SoftDeletes;
+    use HasFactory, UuidTrait, CreatedByTrait, SoftDeletes;
 
     protected $fillable = [
         'title',
@@ -23,10 +24,10 @@ class Task extends Model
         'due_date',
     ];
 
-    public function getDueDateAttribute($date): ?string
-    {
-        return $date ? $date->format('Y-m-d') : null;
-    }
+//    public function getDueDateAttribute($date): ?string
+//    {
+//        return $date ? $date->format('Y-m-d') : null;
+//    }
 //    public function scopeCreatedBy($query, $userId): \Illuminate\Database\Eloquent\Builder
 //    {
 //        return $query->where('created_by', $userId);
@@ -37,8 +38,14 @@ class Task extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function assignedTo(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+//    public function assignedTo(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+//    {
+//        return $this->belongsTo(UserTask::class, 'user_id');
+//    }
+
+
+    public function users(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsToMany(User::class, 'user_tasks', 'task_id', 'user_id');
     }
 }

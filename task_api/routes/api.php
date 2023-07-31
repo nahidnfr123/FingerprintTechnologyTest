@@ -15,6 +15,7 @@ Route::group(['middleware' => ['throttle:5,1', 'guest']], function () {
 
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/user', [UserController::class, 'authUser']);
+    Route::get('/users-options', [UserController::class, 'usersOptions']);
     Route::put('/user', [UserController::class, 'update']);
     Route::post('/logout', [AuthenticationController::class, 'logout']);
 
