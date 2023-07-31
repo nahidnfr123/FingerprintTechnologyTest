@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ForgetPasswordRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\UserOptionsResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +25,12 @@ class UserController extends Controller
     {
         $users = User::all();
         return (UserResource::collection($users))->response();
+    }
+
+    public function usersOptions(): JsonResponse
+    {
+        $users = User::all();
+        return (UserOptionsResource::collection($users))->response();
     }
 
 
