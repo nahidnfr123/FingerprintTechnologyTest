@@ -1,5 +1,5 @@
 <script setup>
-import {computed} from 'vue'
+import {computed, onMounted} from 'vue'
 import {useRoute, RouterLink, RouterView} from 'vue-router'
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";

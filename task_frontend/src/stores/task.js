@@ -9,7 +9,7 @@ export const useTaskStore = defineStore('task', {
     }),
     getters: {
         isAuthenticated: (state) => {
-            return !!(state.token && (state.user && state.user.id))
+            return !!(state.token && (state.user && Object.keys(state.user).length))
         },
     },
     actions: {

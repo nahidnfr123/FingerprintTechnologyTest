@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', {
   }),
   getters: {
     isAuthenticated: (state) => {
-      return !!(state.token && (state.user && state.user.id))
+      return !!(state.token && (state.user && Object.keys(state.user).length))
     },
   },
   actions: {
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', {
     setTokenUser(token = null, user = {}) {
       this.token = token // set token in store ...
       this.user = user // set the user data to store ...
-      this.isLoggedIn = !!(token && user && user.id) // set the isLoggedIn State to true if user and token is available ...
+      this.isLoggedIn = !!(token && user && Object.keys(user).length) // set the isLoggedIn State to true if user and token is available ...
       accessToken(token) // Set The Token ...
     },
     async getUser() {
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', {
         this.clearAuth() // Clear Auth Data if there is error fetching User data
       } else {
         this.user = data?.value || null // set the user data to store ...
-        this.isLoggedIn = !!(this.token && this.user && this.user.id) // set the isLoggedIn State to true if user and token is available ...
+        this.isLoggedIn = !!(this.token && this.user && Object.keys(this.user).length) // set the isLoggedIn State to true if user and token is available ...
       }
       return {data: data?.value, pending, error: error?.value, refresh}
     },
