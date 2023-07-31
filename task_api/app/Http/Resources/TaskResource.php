@@ -18,8 +18,9 @@ class TaskResource extends JsonResource
         return [
             'title' => $this->title,
             'description' => $this->description,
-            'status' => $this->status,
             'due_date' => $this->due_date,
+            'created_by' => $this->created_by,
+            'status' => $this->status,
             'owner' => new UserResource($this->whenLoaded('owner')),
             'users' => UserResource::collection($this->whenLoaded('users')),
         ];

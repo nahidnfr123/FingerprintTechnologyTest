@@ -27,7 +27,7 @@ class TaskController extends Controller
 //            return $this->unauthorized();
             return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
         }
-        $tasks = $user->ownedTasks()->with('users')->get();
+        $tasks = $user->ownedTasks()->with('users')->latest()->get();
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
@@ -65,8 +65,13 @@ class TaskController extends Controller
     {
         $data = $request->validated();
         $user = auth()->user();
+
         $task->update($data);
-        $task->users()->attach($data['assigned_to']);
+        $userIds = User::whereIn('uuid', $data['assigned_to'])->pluck('id');
+        if (isset($data['assigned_to'])) {
+            $task->users()->sync($userIds);
+        }
+        $task->load('users');
         return $this->successResponse(new TaskResource($task), 'Task Created Successfully.');
     }
 
