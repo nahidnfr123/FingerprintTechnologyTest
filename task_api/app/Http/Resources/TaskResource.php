@@ -20,8 +20,8 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'due_date' => $this->due_date,
-            'created_by' => $this->whenLoaded('createdBy', UserResource::collection($this->createdBy)),
-            'assigned_to' => $this->whenLoaded('users', UserResource::collection($this->assignedTo)),
+            'owner' => new UserResource($this->whenLoaded('owner')),
+            'users' => UserResource::collection($this->whenLoaded('users')),
         ];
     }
 }

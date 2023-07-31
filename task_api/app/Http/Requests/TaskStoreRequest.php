@@ -25,7 +25,7 @@ class TaskStoreRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
 //            'status' => 'required|string|in:todo,doing,done',
-            'due_date' => 'nullable|date_format:Y-m-d',
+            'due_date' => 'nullable|after_or_equal:today',
             'assigned_to' => 'nullable|array',
             'assigned_to.*' => 'nullable|exists:users,uuid',
         ];

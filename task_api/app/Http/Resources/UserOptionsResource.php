@@ -17,7 +17,7 @@ class UserOptionsResource extends JsonResource
 //        return parent::toArray($request);
         return [
             'value' => $this->uuid,
-            'label' => $this->name,
+            'label' => $this->name . (auth()->id() === $this->id ? ' - (You)' : ''),
         ];
     }
 }
