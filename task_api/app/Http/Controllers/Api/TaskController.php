@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskStoreRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
+use App\Models\User;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,8 +27,7 @@ class TaskController extends Controller
 //            return $this->unauthorized();
             return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
         }
-        $tasks = $user->createdTasks;
-        $tasks->load('users');
+        $tasks = $user->ownedTasks()->with('users')->get();
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
@@ -37,11 +37,15 @@ class TaskController extends Controller
     public function store(TaskStoreRequest $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
+        $data['status'] = 'open';
         $user = auth()->user();
-        $task = $user->createdTasks()->create($data);
+
+        $task = $user->ownedTasks()->create($data);
+        $userIds = User::whereIn('uuid', $data['assigned_to'])->pluck('id');
         if (isset($data['assigned_to'])) {
-            $task->users->attach($data['assigned_to']);
+            $task->users()->sync($userIds);
         }
+        $task->load('users');
         return $this->successResponse(new TaskResource($task), 'Task Created Successfully.');
     }
 
