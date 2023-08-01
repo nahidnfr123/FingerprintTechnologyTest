@@ -27,7 +27,8 @@ class Task extends Model
 
     public function getDueDateAttribute($date): ?string
     {
-        return $date ? Carbon::parse($date)->format('h:i:s a, d-m-Y ') : null;
+//        return $date ? Carbon::parse($date)->format('h:i:s a, d-m-Y ') : null;
+        return $date;
     }
 //    public function scopeCreatedBy($query, $userId): \Illuminate\Database\Eloquent\Builder
 //    {

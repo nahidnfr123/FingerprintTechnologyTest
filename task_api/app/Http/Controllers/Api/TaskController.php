@@ -31,6 +31,16 @@ class TaskController extends Controller
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
+    public function todos(){
+        $user = auth()->user();
+        if (!$user) {
+//            return $this->unauthorized();
+            return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+        $tasks = $user->assignedTasks()->latest()->orderBy('due_date')->get();
+        return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -41,7 +51,7 @@ class TaskController extends Controller
         $user = auth()->user();
 
         $task = $user->ownedTasks()->create($data);
-        $userIds = User::whereIn('uuid', $data['assigned_to'])->pluck('id');
+        $userIds = User::whereIn('id', $data['assigned_to'])->pluck('id');
         if (isset($data['assigned_to'])) {
             $task->users()->sync($userIds);
         }
@@ -61,13 +71,12 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task): \Illuminate\Http\JsonResponse
+    public function update(TaskStoreRequest $request, Task $task): \Illuminate\Http\JsonResponse
     {
         $data = $request->validated();
-        $user = auth()->user();
 
         $task->update($data);
-        $userIds = User::whereIn('uuid', $data['assigned_to'])->pluck('id');
+        $userIds = User::whereIn('id', $data['assigned_to'])->pluck('id');
         if (isset($data['assigned_to'])) {
             $task->users()->sync($userIds);
         }
