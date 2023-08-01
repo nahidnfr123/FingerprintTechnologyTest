@@ -34,10 +34,9 @@ class TaskController extends Controller
     public function todos(){
         $user = auth()->user();
         if (!$user) {
-//            return $this->unauthorized();
             return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
         }
-        $tasks = $user->assignedTasks()->latest()->orderBy('due_date')->get();
+        $tasks = $user->assignedTasks()->with('users')->orderBy('due_date', 'ASC')->get();
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
