@@ -108,6 +108,6 @@ const props = defineProps({
 const {isAuthenticated} = storeToRefs(useAuthStore())
 const navigationLinks = [
   {title: 'Home', link: '/', icon: "fa6-solid:house-chimney"},
-  {title: 'Dashboard', link: '/dashboard'},
+  {title: 'Tasks', link: '/dashboard'},
 ]
 </script>
