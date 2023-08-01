@@ -31,7 +31,8 @@ class TaskController extends Controller
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
-    public function todos(){
+    public function todos()
+    {
         $user = auth()->user();
         if (!$user) {
             return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
@@ -74,11 +75,30 @@ class TaskController extends Controller
     {
         $data = $request->validated();
 
+        if ($task->created_by != auth()->id()) {
+            return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
+        }
+
         $task->update($data);
         $userIds = User::whereIn('id', $data['assigned_to'])->pluck('id');
         if (isset($data['assigned_to'])) {
             $task->users()->sync($userIds);
         }
+        $task->load('users');
+        return $this->successResponse(new TaskResource($task), 'Task Created Successfully.');
+    }
+
+    public function updateStatus(Request $request, Task $task): \Illuminate\Http\JsonResponse
+    {
+        $data = $request->validate([
+            'status' => 'required|in:open,in-progress,done',
+        ]);
+
+//        if ($task->created_by != auth()->id()) {
+//            return $this->errorResponse('Unauthorized', ResponseAlias::HTTP_UNAUTHORIZED);
+//        }
+
+        $task->update($data);
         $task->load('users');
         return $this->successResponse(new TaskResource($task), 'Task Created Successfully.');
     }

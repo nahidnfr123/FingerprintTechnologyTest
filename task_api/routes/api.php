@@ -19,8 +19,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::put('/user', [UserController::class, 'update']);
     Route::post('/logout', [AuthenticationController::class, 'logout']);
 
-    Route::apiResource('tasks', TaskController::class);
     Route::get('todos', [TaskController::class, 'todos']);
+    Route::post('task/update-status/{task}', [TaskController::class, 'updateStatus']);
+    Route::apiResource('tasks', TaskController::class);
 });
 
 
