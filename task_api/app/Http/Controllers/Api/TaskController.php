@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskStoreRequest;
 use App\Http\Resources\TaskResource;
+use App\Jobs\TaskCreated;
+use App\Jobs\TaskMailJob;
 use App\Models\Task;
 use App\Models\User;
 use App\Traits\ApiResponseTrait;
@@ -31,7 +33,7 @@ class TaskController extends Controller
         return $this->successResponse(TaskResource::collection($tasks), 'Task Created Successfully.');
     }
 
-    public function todos()
+    public function todos(): \Illuminate\Http\JsonResponse
     {
         $user = auth()->user();
         if (!$user) {
@@ -56,6 +58,7 @@ class TaskController extends Controller
             $task->users()->sync($userIds);
         }
         $task->load('users');
+        TaskCreated::dispatch($task);
         return $this->successResponse(new TaskResource($task), 'Task Created Successfully.');
     }
 

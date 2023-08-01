@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\TaskMailJob;
 use App\Traits\CreatedByTrait;
 use App\Traits\UuidTrait;
 use Carbon\Carbon;

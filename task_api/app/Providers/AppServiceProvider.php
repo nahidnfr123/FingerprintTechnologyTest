@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Http\Resources\UserResource;
+use App\Models\Task;
+use App\Observers\TaskObserver;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 
