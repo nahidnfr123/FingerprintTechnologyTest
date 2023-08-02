@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import {useAuthStore} from "@/stores/auth";
+import {storeToRefs} from "pinia";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,11 +68,12 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   const authStore = useAuthStore()
-  if (to.meta.onlyGuest && authStore.isLoggedIn) { // Guest only ...
+  const {isLoggedIn} = storeToRefs(authStore)
+  if (to.meta.onlyGuest && isLoggedIn.value) { // Guest only ...
     if (from) return {path: from.path}
     return {path: '/'}
   }
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) { // Require Authenticated ...
+  if (to.meta.requiresAuth && !isLoggedIn.value) { // Require Authenticated ...
     return {
       path: '/auth/login',
       // save the location we were at to come back later

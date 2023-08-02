@@ -22,6 +22,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'name',
         'email',
         'password',
@@ -64,13 +65,13 @@ class User extends Authenticatable
         $this->notify(new PasswordResetNotification($data));
     }
 
-    public function createdTasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function ownedTasks(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Task::class, 'created_by');
     }
 
-    public function tasks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function assignedTasks(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(UserTask::class, 'user_id');
+        return $this->belongsToMany(Task::class, 'user_tasks');
     }
 }

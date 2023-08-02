@@ -75,8 +75,8 @@ import {ref} from "vue";
 import AuthFormContainer from "@/components/AuthFormContainer.vue";
 import {useRoute, useRouter} from "vue-router";
 
-const router = useRouter()
 const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const isLoading = ref(false)
 

@@ -1,6 +1,6 @@
 <template>
   <main class="min-h-screen">
-    <TheHeader/>
+    <TheHeader :hideLoginButton="false"/>
     <main class="min-h-[70vh] mb-10">
       <slot/>
     </main>

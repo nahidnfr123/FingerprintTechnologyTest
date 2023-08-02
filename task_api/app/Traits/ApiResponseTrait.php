@@ -24,7 +24,7 @@ trait ApiResponseTrait
         ], $code);
     }
 
-    protected function validationErrorResponse($error, $message = null, $code): \Illuminate\Http\JsonResponse
+    protected function validationErrorResponse($error, $message = null, $code = 422): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'status' => 'fail',

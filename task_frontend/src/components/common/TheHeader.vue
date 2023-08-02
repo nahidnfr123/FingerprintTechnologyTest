@@ -29,11 +29,11 @@
           </PopoverGroup>
 
           <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-            <div v-if="authStore.isAuthenticated">
+            <div v-if="isAuthenticated">
               <UserMenuDropdown/>
             </div>
             <div v-else>
-              <RouterLink v-if="!hideLoginButton" to="/auth/login"
+              <RouterLink v-if="!props.hideLoginButton" to="/auth/login"
                           class="text-sm font-semibold leading-6 text-gray-900 px-4 py-3 rounded-xl hover:bg-gray-100 duration-500">
                 Login <span aria-hidden="true">→</span>
                 <!--                <PrimaryButton text="Login" class-name="rounded-full"/>-->
@@ -77,11 +77,11 @@
             </div>
           </div>
           <div class="space-y-6 py-6 px-5">
-            <div v-if="authStore.isLoggedIn">
+            <div v-if="isAuthenticated">
               <UserMenuDropdown/>
             </div>
             <div v-else>
-              <RouterLink v-if="!hideLoginButton" to="/auth/login">
+              <RouterLink v-if="!props.hideLoginButton" to="/auth/login">
                 <PrimaryButton text="Login" class-name="w-full rounded-lg"/>
               </RouterLink>
             </div>
@@ -101,13 +101,13 @@ import {useAuthStore} from "@/stores/auth";
 import UserMenuDropdown from "@/components/common/UserMenuDropdown.vue";
 import {storeToRefs} from "pinia";
 
-defineProps({
+const props = defineProps({
   hideLoginButton: {type: Boolean, default: false}
 })
 
-const authStore = storeToRefs(useAuthStore())
+const {isAuthenticated} = storeToRefs(useAuthStore())
 const navigationLinks = [
   {title: 'Home', link: '/', icon: "fa6-solid:house-chimney"},
-  {title: 'Dashboard', link: '/dashboard'},
+  {title: 'Tasks', link: '/dashboard'},
 ]
 </script>

@@ -4,7 +4,7 @@ export default function accessToken(token = null, clearToken = false) {
   if (token) {
     Cookies.set('token', token, {
       expires: 7,
-      path: '',
+      path: '/',
       sameSite: 'strict',
       secure: process.env.NODE_ENV === 'production'
     })
